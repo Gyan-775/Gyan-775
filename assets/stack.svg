@@ -1,0 +1,42 @@
+<svg width="1200" height="560" viewBox="0 0 1200 560" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tech stack tiles">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070c18"/>
+      <stop offset="100%" stop-color="#150b29"/>
+    </linearGradient>
+    <linearGradient id="sline" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <filter id="sglow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <rect width="1200" height="560" rx="24" fill="url(#sbg)"/>
+  <rect x="1" y="1" width="1198" height="558" rx="23" stroke="url(#sline)" stroke-opacity="0.35"/>
+  <text x="60" y="78" fill="#e4f5ff" font-family="'Segoe UI', Arial, sans-serif" font-size="38" font-weight="700">TECH STACK</text>
+
+  <g font-family="'JetBrains Mono', monospace" font-size="16" fill="#d7efff">
+    <g transform="translate(60,120)">
+      <g id="tile" fill="#0c152b" fill-opacity="0.78" stroke="#67e8f9" stroke-opacity="0.25"></g>
+    </g>
+  </g>
+
+  <g font-family="'JetBrains Mono', monospace" font-size="16" fill="#d7efff">
+    <g transform="translate(60,120)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#67e8f9" stroke-opacity="0.25"/><image href="https://cdn.simpleicons.org/html5/E34F26" x="22" y="24" width="34" height="34"/><text x="22" y="84">HTML</text><rect x="-220" y="0" width="80" height="110" fill="#a5f3fc" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="60 120;60 115;60 120" dur="5s" repeatCount="indefinite"/></g>
+    <g transform="translate(250,120)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#67e8f9" stroke-opacity="0.25"/><image href="https://cdn.simpleicons.org/css/1572B6" x="22" y="24" width="34" height="34"/><text x="22" y="84">CSS</text><rect x="-220" y="0" width="80" height="110" fill="#a5f3fc" opacity="0.08"><animate attributeName="x" values="-220;190" dur="5.5s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="250 120;250 116;250 120" dur="5.4s" repeatCount="indefinite"/></g>
+    <g transform="translate(440,120)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#67e8f9" stroke-opacity="0.25"/><image href="https://cdn.simpleicons.org/javascript/F7DF1E" x="22" y="24" width="34" height="34"/><text x="22" y="84">JavaScript</text><rect x="-220" y="0" width="80" height="110" fill="#a5f3fc" opacity="0.08"><animate attributeName="x" values="-220;190" dur="5.8s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="440 120;440 115;440 120" dur="5.2s" repeatCount="indefinite"/></g>
+    <g transform="translate(630,120)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#67e8f9" stroke-opacity="0.25"/><image href="https://cdn.simpleicons.org/react/61DAFB" x="22" y="24" width="34" height="34"/><text x="22" y="84">React</text><rect x="-220" y="0" width="80" height="110" fill="#a5f3fc" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6.2s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="630 120;630 116;630 120" dur="5.6s" repeatCount="indefinite"/></g>
+    <g transform="translate(820,120)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#67e8f9" stroke-opacity="0.25"/><image href="https://cdn.simpleicons.org/openjdk/FFFFFF" x="22" y="24" width="34" height="34"/><text x="22" y="84">Java</text><rect x="-220" y="0" width="80" height="110" fill="#a5f3fc" opacity="0.08"><animate attributeName="x" values="-220;190" dur="5.7s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="820 120;820 115;820 120" dur="5.1s" repeatCount="indefinite"/></g>
+
+    <g transform="translate(60,260)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#a78bfa" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/nodedotjs/5FA04E" x="22" y="24" width="34" height="34"/><text x="22" y="84">Node.js</text><rect x="-220" y="0" width="80" height="110" fill="#c4b5fd" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6.4s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="60 260;60 254;60 260" dur="5.3s" repeatCount="indefinite"/></g>
+    <g transform="translate(250,260)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#a78bfa" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/express/FFFFFF" x="22" y="24" width="34" height="34"/><text x="22" y="84">Express</text><rect x="-220" y="0" width="80" height="110" fill="#c4b5fd" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6.1s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="250 260;250 255;250 260" dur="5.4s" repeatCount="indefinite"/></g>
+    <g transform="translate(440,260)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#a78bfa" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/mongodb/47A248" x="22" y="24" width="34" height="34"/><text x="22" y="84">MongoDB</text><rect x="-220" y="0" width="80" height="110" fill="#c4b5fd" opacity="0.08"><animate attributeName="x" values="-220;190" dur="5.9s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="440 260;440 254;440 260" dur="5.5s" repeatCount="indefinite"/></g>
+    <g transform="translate(630,260)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#a78bfa" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/python/3776AB" x="22" y="24" width="34" height="34"/><text x="22" y="84">Python</text><rect x="-220" y="0" width="80" height="110" fill="#c4b5fd" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6.3s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="630 260;630 255;630 260" dur="5.2s" repeatCount="indefinite"/></g>
+    <g transform="translate(820,260)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#a78bfa" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/git/F05032" x="22" y="24" width="34" height="34"/><text x="22" y="84">Git</text><rect x="-220" y="0" width="80" height="110" fill="#c4b5fd" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="820 260;820 254;820 260" dur="5.8s" repeatCount="indefinite"/></g>
+
+    <g transform="translate(250,400)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#f472b6" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/github/FFFFFF" x="22" y="24" width="34" height="34"/><text x="22" y="84">GitHub</text><rect x="-220" y="0" width="80" height="110" fill="#fbcfe8" opacity="0.08"><animate attributeName="x" values="-220;190" dur="6.4s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="250 400;250 394;250 400" dur="5.7s" repeatCount="indefinite"/></g>
+    <g transform="translate(440,400)"><rect width="170" height="110" rx="16" fill="#0c152b" stroke="#f472b6" stroke-opacity="0.28"/><image href="https://cdn.simpleicons.org/visualstudiocode/007ACC" x="22" y="24" width="34" height="34"/><text x="22" y="84">VS Code</text><rect x="-220" y="0" width="80" height="110" fill="#fbcfe8" opacity="0.08"><animate attributeName="x" values="-220;190" dur="5.8s" repeatCount="indefinite"/></rect><animateTransform attributeName="transform" type="translate" values="440 400;440 394;440 400" dur="5.6s" repeatCount="indefinite"/></g>
+  </g>
+
+  <circle cx="1050" cy="90" r="4" fill="#7dd3fc" filter="url(#sglow)"><animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite"/></circle>
+</svg>
