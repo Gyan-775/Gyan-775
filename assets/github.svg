@@ -1,46 +1,63 @@
-<svg width="1200" height="430" viewBox="0 0 1200 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub dashboard panel with safe fallback cards">
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub Dashboard</title>
+  <desc id="desc">Cinematic futuristic frame for live GitHub statistics, language data, and contribution activity.</desc>
   <defs>
-    <linearGradient id="gbg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#080d19"/>
-      <stop offset="100%" stop-color="#170d2c"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080D19"/>
+      <stop offset="0.55" stop-color="#0B1120"/>
+      <stop offset="1" stop-color="#170D2C"/>
     </linearGradient>
-    <linearGradient id="gline" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#a855f7"/>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#22D3EE"/>
+      <stop offset="0.5" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#A855F7"/>
     </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M34 0H0V34" stroke="#334155" stroke-opacity=".16"/>
+    </pattern>
+    <pattern id="scan" width="1200" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 1H1200" stroke="#22D3EE" stroke-opacity=".08"/>
+    </pattern>
+    <style>
+      .pulse { animation: pulse 3s ease-in-out infinite; transform-origin:center; }
+      .scan { animation: scan 7s linear infinite; }
+      .float { animation: float 4s ease-in-out infinite; }
+      @keyframes pulse { 0%,100%{opacity:.45} 50%{opacity:1} }
+      @keyframes scan { from{transform:translateY(-360px)} to{transform:translateY(360px)} }
+      @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    </style>
   </defs>
+  <rect width="1200" height="360" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="358" rx="23" stroke="url(#edge)" stroke-opacity=".65" stroke-width="2"/>
+  <rect x="18" y="18" width="1164" height="324" rx="16" fill="url(#grid)"/>
+  <rect class="scan" x="18" y="18" width="1164" height="24" fill="url(#scan)"/>
 
-  <rect width="1200" height="430" rx="24" fill="url(#gbg)"/>
-  <rect x="1" y="1" width="1198" height="428" rx="23" stroke="url(#gline)" stroke-opacity="0.35"/>
-  <text x="60" y="74" fill="#e5f4ff" font-family="'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">GITHUB DASHBOARD</text>
-
-  <g font-family="'JetBrains Mono', monospace" fill="#d8efff">
-    <g transform="translate(60,110)">
-      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#67e8f9" stroke-opacity="0.35"/>
-      <text x="24" y="44" font-size="21">GitHub Activity</text>
-      <text x="24" y="92" font-size="16" fill="#b9e6ff">ACTIVITY</text>
-      <text x="24" y="122" font-size="14" fill="#b9e6ff">See GitHub profile for live</text>
-      <text x="24" y="146" font-size="14" fill="#b9e6ff">contribution activity.</text>
-    </g>
-
-    <g transform="translate(430,110)">
-      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#a78bfa" stroke-opacity="0.35"/>
-      <text x="24" y="44" font-size="21">Most Used Languages</text>
-      <text x="24" y="92" font-size="16" fill="#d8b4fe">ACTIVITY</text>
-      <text x="24" y="122" font-size="14" fill="#d7c5ff">See GitHub profile for live</text>
-      <text x="24" y="146" font-size="14" fill="#d7c5ff">language activity.</text>
-    </g>
-
-    <g transform="translate(800,110)">
-      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#f472b6" stroke-opacity="0.35"/>
-      <text x="24" y="44" font-size="21">Contribution Activity</text>
-      <text x="24" y="92" font-size="16" fill="#f9a8d4">ACTIVITY</text>
-      <text x="24" y="122" font-size="14" fill="#fecfe8">See GitHub profile for live</text>
-      <text x="24" y="146" font-size="14" fill="#fecfe8">contribution graph updates.</text>
-    </g>
+  <g filter="url(#glow)" class="pulse" stroke="url(#edge)" stroke-width="3" stroke-linecap="round">
+    <path d="M42 86V48H80"/><path d="M1158 86V48H1120"/>
+    <path d="M42 274V312H80"/><path d="M1158 274V312H1120"/>
+  </g>
+  <g fill="#22D3EE" class="float">
+    <circle cx="102" cy="116" r="2"/><circle cx="1092" cy="102" r="2"/><circle cx="1070" cy="286" r="1.5"/><circle cx="136" cy="292" r="1.5"/>
   </g>
 
-  <a href="https://github.com/Gyan-775" target="_blank">
-    <text x="60" y="394" fill="#7dd3fc" font-family="'JetBrains Mono', monospace" font-size="22">https://github.com/Gyan-775</text>
-  </a>
+  <text x="60" y="78" fill="#E5F4FF" font-family="Segoe UI,Arial,sans-serif" font-size="36" font-weight="700" letter-spacing="1">GITHUB DASHBOARD</text>
+  <text x="62" y="108" fill="#94A3B8" font-family="JetBrains Mono,Consolas,monospace" font-size="14" letter-spacing="2">REAL-TIME PROFILE TELEMETRY // GYAN-775</text>
+  <g transform="translate(1000 62)">
+    <circle cx="0" cy="0" r="6" fill="#22D3EE" class="pulse"/>
+    <text x="18" y="5" fill="#67E8F9" font-family="JetBrains Mono,Consolas,monospace" font-size="15" font-weight="700" letter-spacing="1">LIVE DATA</text>
+  </g>
+
+  <g fill="#CBD5E1" font-family="JetBrains Mono,Consolas,monospace" font-size="13" letter-spacing="1">
+    <text x="62" y="166">ACTIVITY STREAM</text>
+    <text x="447" y="166">LANGUAGE MATRIX</text>
+    <text x="832" y="166">CONTRIBUTION SIGNAL</text>
+  </g>
+  <g stroke="#334155" stroke-opacity=".55" stroke-dasharray="4 8">
+    <path d="M62 180H1138"/><path d="M400 136V300"/><path d="M785 136V300"/>
+  </g>
+  <text x="62" y="326" fill="#64748B" font-family="JetBrains Mono,Consolas,monospace" font-size="12">LIVE PANELS RENDERED BELOW // SOURCE: GITHUB DATA SERVICES</text>
 </svg>
