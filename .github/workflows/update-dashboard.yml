@@ -1289,7 +1289,276 @@ jobs:
           print("================================")
 
           PY
+      - name: Install Pillow
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install Pillow
 
+
+      - name: Create animated GitHub GIF
+        run: |
+          python <<'PY'
+          from PIL import Image, ImageDraw
+          import os
+          import math
+
+          svg_path = "assets/github.svg"
+          gif_path = "assets/github.gif"
+
+          # ------------------------------------------------------------
+          # IMPORTANT:
+          # We use the generated SVG as the visual source.
+          #
+          # GitHub does not animate SVGs in README rendering,
+          # so we create a REAL GIF from it.
+          # ------------------------------------------------------------
+
+          try:
+              import cairosvg
+          except ImportError:
+              print("Installing CairoSVG...")
+              os.system("python -m pip install cairosvg")
+              import cairosvg
+
+
+          # Convert SVG → PNG
+          cairosvg.svg2png(
+              url=svg_path,
+              write_to="/tmp/dashboard.png",
+              output_width=1200,
+              output_height=650
+          )
+
+
+          base = Image.open(
+              "/tmp/dashboard.png"
+          ).convert("RGBA")
+
+
+          frames = []
+
+          # ------------------------------------------------------------
+          # 12-frame animation
+          # ------------------------------------------------------------
+
+          for frame_number in range(12):
+
+              frame = base.copy()
+
+              draw = ImageDraw.Draw(
+                  frame,
+                  "RGBA"
+              )
+
+
+              # --------------------------------------------------------
+              # LIVE PULSE
+              # --------------------------------------------------------
+
+              pulse = (
+                  math.sin(
+                      frame_number
+                      / 12
+                      * math.pi
+                      * 2
+                  )
+                  + 1
+              ) / 2
+
+              radius = 6 + pulse * 3
+
+              draw.ellipse(
+                  (
+                      1085 - radius,
+                      54 - radius,
+                      1085 + radius,
+                      54 + radius
+                  ),
+                  fill=(
+                      34,
+                      211,
+                      238,
+                      int(35 + pulse * 70)
+                  )
+              )
+
+              draw.ellipse(
+                  (
+                      1085 - 5,
+                      54 - 5,
+                      1085 + 5,
+                      54 + 5
+                  ),
+                  fill=(
+                      34,
+                      211,
+                      238,
+                      255
+                  )
+              )
+
+
+              # --------------------------------------------------------
+              # SCANNING LINE
+              # --------------------------------------------------------
+
+              scan_x = 55 + (
+                  frame_number * 92
+              )
+
+              if scan_x > 1140:
+                  scan_x -= 1085
+
+              draw.line(
+                  (
+                      scan_x,
+                      104,
+                      scan_x + 90,
+                      104
+                  ),
+                  fill=(
+                      34,
+                      211,
+                      238,
+                      85
+                  ),
+                  width=2
+              )
+
+
+              # --------------------------------------------------------
+              # TECH ARCADE ENERGY
+              # --------------------------------------------------------
+
+              arcade_x = 620
+              arcade_y = 115
+
+              energy = (
+                  math.sin(
+                      frame_number / 12
+                      * math.pi
+                      * 2
+                  )
+                  + 1
+              ) / 2
+
+              draw.rounded_rectangle(
+                  (
+                      arcade_x + 1,
+                      arcade_y + 1,
+                      arcade_x + 527,
+                      arcade_y + 244
+                  ),
+                  radius=16,
+                  outline=(
+                      34,
+                      211,
+                      238,
+                      int(20 + energy * 55)
+                  ),
+                  width=2
+              )
+
+
+              # --------------------------------------------------------
+              # PLAYER MOTION
+              # --------------------------------------------------------
+
+              player_offset = int(
+                  math.sin(
+                      frame_number
+                      / 12
+                      * math.pi
+                      * 2
+                  ) * 3
+              )
+
+              # Small cyan movement trail
+              draw.line(
+                  (
+                      645,
+                      315 + player_offset,
+                      665,
+                      315 + player_offset
+                  ),
+                  fill=(
+                      34,
+                      211,
+                      238,
+                      70
+                  ),
+                  width=2
+              )
+
+
+              # --------------------------------------------------------
+              # CONTRIBUTION GRAPH SUBTLE GLOW
+              # --------------------------------------------------------
+
+              glow = int(
+                  20 +
+                  25 * (
+                      (
+                          math.sin(
+                              frame_number
+                              / 12
+                              * math.pi
+                              * 2
+                          )
+                          + 1
+                      ) / 2
+                  )
+              )
+
+              # A subtle frame around the graph
+              draw.rounded_rectangle(
+                  (
+                      145,
+                      445,
+                      1100,
+                      585
+                  ),
+                  radius=10,
+                  outline=(
+                      34,
+                      211,
+                      238,
+                      glow
+                  ),
+                  width=1
+              )
+
+
+              frames.append(
+                  frame.convert("RGB")
+              )
+
+
+          # ------------------------------------------------------------
+          # SAVE REAL GIF
+          # ------------------------------------------------------------
+
+          frames[0].save(
+              gif_path,
+              save_all=True,
+              append_images=frames[1:],
+              duration=100,
+              loop=0,
+              optimize=False
+          )
+
+
+          print(
+              "Animated GIF created:",
+              gif_path
+          )
+
+          print(
+              "Frames:",
+              len(frames)
+          )
+
+          PY
 
       # ============================================================
       # COMMIT
