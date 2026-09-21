@@ -18,9 +18,9 @@
   <img src="./assets/social.svg" width="100%" alt="Connect with Gyan" />
   <br>
   <p>
-    <a href="YOUR_LINKEDIN_URL">LinkedIn (placeholder)</a> ·
-    <a href="YOUR_INSTAGRAM_URL">Instagram (placeholder)</a> ·
-    <a href="YOUR_X_URL">X (placeholder)</a>
+    <a href="(https://www.linkedin.com/in/gyan-deep-908741391?utm_source=share_via&utm_content=profile&utm_medium=member_android)">LinkedIn</a>  ·
+    <a href="(https://www.instagram.com/furyy_70?stkn=MXM2M2JmODA4emw4NA==)">Instagram</a>  ·
+    <a href="(https://x.com/Gyan7554)">X</a>
   </p>
   <p><sub>Replace all three placeholder URLs above with your real LinkedIn, Instagram, and X links.</sub></p>
   <br>
