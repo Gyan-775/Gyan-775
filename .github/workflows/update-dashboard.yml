@@ -1294,12 +1294,24 @@ jobs:
       # ============================================================
       # COMMIT
       # ============================================================
-
       - name: Commit dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Save the freshly generated dashboard
+          cp assets/github.svg /tmp/github.svg
+
+          # Get the newest version of main
+          git fetch origin main
+
+          # Move to the newest remote main
+          git reset --hard origin/main
+
+          # Put our newly generated dashboard back
+          cp /tmp/github.svg assets/github.svg
+
+          # Commit only the generated dashboard
           git add assets/github.svg
 
           if git diff --cached --quiet; then
@@ -1309,7 +1321,6 @@ jobs:
 
           git commit -m "Update GitHub dashboard"
 
-          git fetch origin main
-          git rebase origin/main
-
+          # Push the dashboard
           git push origin HEAD:main
+
