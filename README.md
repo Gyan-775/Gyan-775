@@ -30,8 +30,6 @@
       <img src="https://github-readme-activity-graph.vercel.app/graph?username=Gyan-775&amp;bg_color=0B1120&amp;color=CBD5E1&amp;line=6366F1&amp;point=22D3EE&amp;area=true&amp;hide_border=true" width="100%" alt="Live GitHub contribution activity graph for Gyan-775" />
     </a>
   </p>
-  <p><sub>Live GitHub statistics temporarily unavailable? <a href="https://github.com/Gyan-775">Open Gyan-775's GitHub profile</a>.</sub></p>
-
   <br><br>
   <img src="./assets/social.svg" width="100%" alt="Connect with Gyan" />
   <br>
