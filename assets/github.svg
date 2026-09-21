@@ -1,0 +1,46 @@
+<svg width="1200" height="430" viewBox="0 0 1200 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub dashboard panel with safe fallback cards">
+  <defs>
+    <linearGradient id="gbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080d19"/>
+      <stop offset="100%" stop-color="#170d2c"/>
+    </linearGradient>
+    <linearGradient id="gline" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="430" rx="24" fill="url(#gbg)"/>
+  <rect x="1" y="1" width="1198" height="428" rx="23" stroke="url(#gline)" stroke-opacity="0.35"/>
+  <text x="60" y="74" fill="#e5f4ff" font-family="'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">GITHUB DASHBOARD</text>
+
+  <g font-family="'JetBrains Mono', monospace" fill="#d8efff">
+    <g transform="translate(60,110)">
+      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#67e8f9" stroke-opacity="0.35"/>
+      <text x="24" y="44" font-size="21">GitHub Activity</text>
+      <text x="24" y="92" font-size="16" fill="#b9e6ff">ACTIVITY</text>
+      <text x="24" y="122" font-size="14" fill="#b9e6ff">See GitHub profile for live</text>
+      <text x="24" y="146" font-size="14" fill="#b9e6ff">contribution activity.</text>
+    </g>
+
+    <g transform="translate(430,110)">
+      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#a78bfa" stroke-opacity="0.35"/>
+      <text x="24" y="44" font-size="21">Most Used Languages</text>
+      <text x="24" y="92" font-size="16" fill="#d8b4fe">ACTIVITY</text>
+      <text x="24" y="122" font-size="14" fill="#d7c5ff">See GitHub profile for live</text>
+      <text x="24" y="146" font-size="14" fill="#d7c5ff">language activity.</text>
+    </g>
+
+    <g transform="translate(800,110)">
+      <rect width="340" height="240" rx="18" fill="#0b1428" stroke="#f472b6" stroke-opacity="0.35"/>
+      <text x="24" y="44" font-size="21">Contribution Activity</text>
+      <text x="24" y="92" font-size="16" fill="#f9a8d4">ACTIVITY</text>
+      <text x="24" y="122" font-size="14" fill="#fecfe8">See GitHub profile for live</text>
+      <text x="24" y="146" font-size="14" fill="#fecfe8">contribution graph updates.</text>
+    </g>
+  </g>
+
+  <a href="https://github.com/Gyan-775" target="_blank">
+    <text x="60" y="394" fill="#7dd3fc" font-family="'JetBrains Mono', monospace" font-size="22">https://github.com/Gyan-775</text>
+  </a>
+</svg>
