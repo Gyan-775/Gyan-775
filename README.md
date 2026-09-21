@@ -18,17 +18,6 @@
   <br><br>
 
   <p>
-    <a href="https://github-readme-stats.vercel.app/api?username=Gyan-775&amp;show_icons=true&amp;include_all_commits=true&amp;count_private=false&amp;hide_border=true&amp;bg_color=0B1120&amp;title_color=22D3EE&amp;text_color=CBD5E1&amp;icon_color=818CF8" target="_blank" rel="noopener noreferrer">
-      <img src="https://github-readme-stats.vercel.app/api?username=Gyan-775&amp;show_icons=true&amp;include_all_commits=true&amp;count_private=false&amp;hide_border=true&amp;bg_color=0B1120&amp;title_color=22D3EE&amp;text_color=CBD5E1&amp;icon_color=818CF8" width="49%" alt="Live GitHub overview and activity statistics for Gyan-775" />
-    </a>
-    <a href="https://github-readme-stats.vercel.app/api/top-langs/?username=Gyan-775&amp;layout=compact&amp;hide_border=true&amp;bg_color=0B1120&amp;title_color=22D3EE&amp;text_color=CBD5E1" target="_blank" rel="noopener noreferrer">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Gyan-775&amp;layout=compact&amp;hide_border=true&amp;bg_color=0B1120&amp;title_color=22D3EE&amp;text_color=CBD5E1" width="49%" alt="Live most-used programming languages for Gyan-775" />
-    </a>
-  </p>
-  <p>
-    <a href="https://github-readme-activity-graph.vercel.app/graph?username=Gyan-775&amp;bg_color=0B1120&amp;color=CBD5E1&amp;line=6366F1&amp;point=22D3EE&amp;area=true&amp;hide_border=true" target="_blank" rel="noopener noreferrer">
-      <img src="https://github-readme-activity-graph.vercel.app/graph?username=Gyan-775&amp;bg_color=0B1120&amp;color=CBD5E1&amp;line=6366F1&amp;point=22D3EE&amp;area=true&amp;hide_border=true" width="100%" alt="Live GitHub contribution activity graph for Gyan-775" />
-    </a>
   </p>
   <br><br>
   <img src="./assets/social.svg" width="100%" alt="Connect with Gyan" />
