@@ -8,8 +8,7 @@ on:
       - "assets/github.svg"
 
   schedule:
-    # Every 6 hours
-  - cron: "*/30 * * * *"
+    - cron: "0 */6 * * *"
 
   workflow_dispatch:
 
@@ -21,8 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Generate live GitHub dashboard
         env:
@@ -35,45 +37,44 @@ jobs:
           from datetime import datetime, timezone
 
           USERNAME = "Gyan-775"
-          TOKEN = os.environ.get("GITHUB_TOKEN")
-
-          if not TOKEN:
-              raise RuntimeError("GITHUB_TOKEN is missing")
+          TOKEN = os.environ["GITHUB_TOKEN"]
 
           HEADERS = {
               "Accept": "application/vnd.github+json",
               "Authorization": f"Bearer {TOKEN}",
               "X-GitHub-Api-Version": "2022-11-28",
-              "User-Agent": "Gyan-775-GitHub-Dashboard"
+              "User-Agent": "Gyan-775-Live-Telemetry"
           }
 
 
           # ============================================================
-          # HTTP HELPERS
+          # API
           # ============================================================
 
           def github_get(url):
-              request = urllib.request.Request(
+              req = urllib.request.Request(
                   url,
-                  headers=HEADERS,
-                  method="GET"
+                  headers=HEADERS
               )
 
-              with urllib.request.urlopen(request, timeout=30) as response:
-                  return json.loads(response.read().decode("utf-8"))
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.loads(
+                      response.read().decode("utf-8")
+                  )
 
 
           def github_graphql(query, variables=None):
+
               payload = {
                   "query": query,
                   "variables": variables or {}
               }
 
-              body = json.dumps(payload).encode("utf-8")
+              data = json.dumps(payload).encode("utf-8")
 
-              request = urllib.request.Request(
+              req = urllib.request.Request(
                   "https://api.github.com/graphql",
-                  data=body,
+                  data=data,
                   headers={
                       **HEADERS,
                       "Content-Type": "application/json"
@@ -81,13 +82,14 @@ jobs:
                   method="POST"
               )
 
-              with urllib.request.urlopen(request, timeout=30) as response:
-                  result = json.loads(response.read().decode("utf-8"))
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  result = json.loads(
+                      response.read().decode("utf-8")
+                  )
 
               if "errors" in result:
                   raise RuntimeError(
-                      "GitHub GraphQL error: "
-                      + json.dumps(result["errors"])
+                      json.dumps(result["errors"])
                   )
 
               return result["data"]
@@ -104,83 +106,83 @@ jobs:
 
 
           # ============================================================
-          # PROFILE DATA
+          # PROFILE
           # ============================================================
-
-          print("Fetching GitHub profile...")
 
           user = github_get(
               f"https://api.github.com/users/{USERNAME}"
           )
 
           public_repos = user.get("public_repos", 0)
-          followers = user.get("followers", 0)
-          following = user.get("following", 0)
 
 
           # ============================================================
           # REPOSITORIES
           # ============================================================
 
-          print("Fetching repositories...")
-
           repositories = []
+
           page = 1
 
           while True:
-              data = github_get(
+
+              repos = github_get(
                   f"https://api.github.com/users/{USERNAME}/repos"
                   f"?per_page=100&page={page}&type=owner"
               )
 
-              if not data:
+              if not repos:
                   break
 
-              repositories.extend(data)
+              repositories.extend(repos)
 
-              if len(data) < 100:
+              if len(repos) < 100:
                   break
 
               page += 1
 
 
+          real_repositories = [
+              repo for repo in repositories
+              if not repo.get("fork")
+          ]
+
           total_stars = sum(
               repo.get("stargazers_count", 0)
-              for repo in repositories
-              if not repo.get("fork")
+              for repo in real_repositories
           )
 
           total_forks = sum(
               repo.get("forks_count", 0)
-              for repo in repositories
-              if not repo.get("fork")
+              for repo in real_repositories
           )
 
 
           # ============================================================
-          # LANGUAGE DATA
+          # LANGUAGES
           # ============================================================
-
-          print("Fetching language data...")
 
           language_totals = {}
 
-          for repo in repositories:
-
-              if repo.get("fork"):
-                  continue
+          for repo in real_repositories:
 
               try:
-                  languages = github_get(repo["languages_url"])
+
+                  languages = github_get(
+                      repo["languages_url"]
+                  )
 
                   for language, amount in languages.items():
+
                       language_totals[language] = (
-                          language_totals.get(language, 0) + amount
+                          language_totals.get(language, 0)
+                          + amount
                       )
 
               except Exception as error:
+
                   print(
-                      f"Could not fetch languages for "
+                      f"Language error for "
                       f"{repo.get('name')}: {error}"
                   )
 
@@ -193,28 +195,12 @@ jobs:
               )
           )
 
-          total_language_bytes = sum(language_totals.values())
-
-          top_languages = []
-
-          if total_language_bytes:
-              for language, amount in list(language_totals.items())[:5]:
-                  percentage = (
-                      amount / total_language_bytes
-                  ) * 100
-
-                  top_languages.append(
-                      (language, percentage)
-                  )
-
 
           # ============================================================
           # REAL CONTRIBUTION CALENDAR
           # ============================================================
 
-          print("Fetching real contribution calendar...")
-
-          contribution_query = """
+          query = """
           query($login: String!) {
             user(login: $login) {
               contributionsCollection {
@@ -227,7 +213,6 @@ jobs:
                       weekday
                       contributionCount
                       color
-                      contributionLevel
                     }
                   }
                 }
@@ -237,7 +222,7 @@ jobs:
           """
 
           contribution_data = github_graphql(
-              contribution_query,
+              query,
               {"login": USERNAME}
           )
 
@@ -247,113 +232,472 @@ jobs:
               ["contributionCalendar"]
           )
 
-          total_contributions = calendar["totalContributions"]
+          total_contributions = calendar[
+              "totalContributions"
+          ]
+
           weeks = calendar["weeks"]
 
-          print(
-              f"Total contributions: "
-              f"{total_contributions}"
-          )
-
-          print(
-              f"Contribution weeks: "
-              f"{len(weeks)}"
-          )
-
 
           # ============================================================
-          # LANGUAGE COLORS
+          # TECH STACK DATA
           # ============================================================
 
-          language_colors = {
+          # GitHub's real language data.
+          # These are displayed as the game's collectible platforms.
+
+          stack_colors = {
               "JavaScript": "#F7DF1E",
               "TypeScript": "#3178C6",
-              "Java": "#F97316",
-              "HTML": "#F97316",
-              "CSS": "#38BDF8",
-              "Python": "#FACC15",
-              "C": "#A5B4FC",
-              "C++": "#60A5FA",
-              "Shell": "#22C55E",
-              "Go": "#22D3EE",
-              "PHP": "#A78BFA",
-              "Kotlin": "#A855F7",
+              "Python": "#3776AB",
+              "Java": "#F89820",
+              "HTML": "#E34F26",
+              "CSS": "#1572B6",
+              "C++": "#00599C",
+              "C": "#A8B9CC",
+              "Go": "#00ADD8",
+              "PHP": "#777BB4",
+              "Kotlin": "#A97BFF",
               "Rust": "#DEA584",
-              "Dart": "#00B4AB",
+              "Dart": "#0175C2",
+              "Shell": "#22C55E",
+              "Swift": "#F05138",
+              "Ruby": "#CC342D"
           }
 
 
+          # Keep the game readable.
+          # Show up to 6 real languages.
+
+          top_languages = list(
+              language_totals.keys()
+          )[:6]
+
+
+          # If fewer languages exist, use the known learning stack
+          # to make the arcade visually complete.
+
+          fallback_stack = [
+              "HTML",
+              "CSS",
+              "JavaScript",
+              "Python",
+              "Java"
+          ]
+
+          for language in fallback_stack:
+
+              if language not in top_languages:
+
+                  if len(top_languages) < 6:
+                      top_languages.append(language)
+
+
+          top_languages = top_languages[:6]
+
+
           # ============================================================
-          # LANGUAGE MATRIX SVG
+          # TECH STACK ARCADE
           # ============================================================
 
-          language_svg = ""
+          tech_game_svg = ""
 
-          language_y = 280
+          platform_x_positions = [
+              30,
+              105,
+              180,
+              255,
+              330,
+              405
+          ]
 
-          for language, percentage in top_languages:
+          platform_y_positions = [
+              135,
+              105,
+              130,
+              92,
+              120,
+              78
+          ]
 
-              width = max(
-                  8,
-                  min(
-                      360,
-                      percentage * 3.6
-                  )
-              )
 
-              color = language_colors.get(
+          # Background stars
+
+          stars = [
+              (35, 38),
+              (82, 55),
+              (140, 32),
+              (212, 50),
+              (285, 35),
+              (350, 54),
+              (430, 32),
+              (470, 60)
+          ]
+
+          for sx, sy in stars:
+
+              tech_game_svg += f"""
+              <circle
+                  cx="{sx}"
+                  cy="{sy}"
+                  r="1.5"
+                  fill="#22D3EE"
+                  opacity="0.8"
+              />
+
+              <circle
+                  cx="{sx}"
+                  cy="{sy}"
+                  r="4"
+                  fill="#22D3EE"
+                  opacity="0.08"
+              />
+              """
+
+
+          # Moon / glow
+
+          tech_game_svg += """
+          <circle
+              cx="465"
+              cy="48"
+              r="20"
+              fill="#312E81"
+              opacity="0.35"
+          />
+
+          <circle
+              cx="458"
+              cy="43"
+              r="13"
+              fill="#6366F1"
+              opacity="0.12"
+          />
+          """
+
+
+          # Mountains
+
+          tech_game_svg += """
+          <path
+              d="
+                M0 205
+                L65 145
+                L105 178
+                L155 125
+                L215 182
+                L270 140
+                L330 190
+                L390 135
+                L450 180
+                L510 130
+                L528 155
+                L528 245
+                L0 245
+                Z
+              "
+              fill="#0F172A"
+          />
+
+          <path
+              d="
+                M0 220
+                L90 170
+                L150 210
+                L220 165
+                L300 215
+                L380 170
+                L460 215
+                L528 175
+                L528 245
+                L0 245
+                Z
+              "
+              fill="#111827"
+          />
+          """
+
+
+          # Game platforms
+
+          for index, language in enumerate(top_languages):
+
+              x = platform_x_positions[index]
+              y = platform_y_positions[index]
+
+              color = stack_colors.get(
                   language,
-                  "#6366F1"
+                  "#22D3EE"
               )
 
-              language_svg += f"""
-              <text
-                  x="650"
-                  y="{language_y}"
-                  class="mono"
-                  font-size="14"
-              >
-                  {escape(language)}
-              </text>
+              # platform shadow
 
+              tech_game_svg += f"""
               <rect
-                  x="650"
-                  y="{language_y + 10}"
-                  width="360"
-                  height="10"
-                  rx="5"
-                  fill="#111827"
+                  x="{x}"
+                  y="{y + 31}"
+                  width="64"
+                  height="8"
+                  rx="4"
+                  fill="#020617"
               />
 
               <rect
-                  x="650"
-                  y="{language_y + 10}"
-                  width="{width}"
-                  height="10"
-                  rx="5"
+                  x="{x}"
+                  y="{y + 27}"
+                  width="64"
+                  height="7"
+                  rx="3"
+                  fill="#22D3EE"
+                  opacity="0.9"
+              />
+
+              <rect
+                  x="{x + 4}"
+                  y="{y + 30}"
+                  width="56"
+                  height="5"
+                  rx="2"
+                  fill="#0E7490"
+              />
+
+              <rect
+                  x="{x + 10}"
+                  y="{y - 10}"
+                  width="44"
+                  height="42"
+                  rx="9"
+                  fill="#071426"
+                  stroke="{color}"
+                  stroke-width="1.5"
+              />
+
+              <rect
+                  x="{x + 13}"
+                  y="{y - 7}"
+                  width="38"
+                  height="36"
+                  rx="7"
                   fill="{color}"
+                  opacity="0.08"
               />
 
               <text
-                  x="1030"
-                  y="{language_y + 19}"
-                  class="muted"
-                  font-size="11"
+                  x="{x + 32}"
+                  y="{y + 14}"
+                  text-anchor="middle"
+                  fill="{color}"
+                  font-family="monospace"
+                  font-size="9"
+                  font-weight="700"
               >
-                  {percentage:.1f}%
+                  {escape(language[:10])}
               </text>
               """
 
-              language_y += 42
+
+          # Player
+
+          tech_game_svg += """
+          <!-- PLAYER -->
+
+          <ellipse
+              cx="35"
+              cy="222"
+              rx="15"
+              ry="4"
+              fill="#020617"
+          />
+
+          <rect
+              x="24"
+              y="196"
+              width="20"
+              height="20"
+              rx="6"
+              fill="#E2E8F0"
+          />
+
+          <rect
+              x="27"
+              y="199"
+              width="14"
+              height="10"
+              rx="3"
+              fill="#0F172A"
+              stroke="#22D3EE"
+              stroke-width="1"
+          />
+
+          <circle
+              cx="31"
+              cy="203"
+              r="1.5"
+              fill="#22D3EE"
+          />
+
+          <circle
+              cx="37"
+              cy="203"
+              r="1.5"
+              fill="#22D3EE"
+          />
+
+          <rect
+              x="20"
+              y="213"
+              width="8"
+              height="5"
+              rx="2"
+              fill="#CBD5E1"
+          />
+
+          <rect
+              x="40"
+              y="213"
+              width="8"
+              height="5"
+              rx="2"
+              fill="#CBD5E1"
+          />
+
+          <!-- trajectory -->
+
+          <path
+              d="M47 205 Q75 170 103 185"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.5"
+              stroke-dasharray="4 4"
+          />
+
+          <path
+              d="M98 180 L105 185 L97 188"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.5"
+          />
+          """
+
+
+          # Finish flag
+
+          tech_game_svg += """
+          <line
+              x1="480"
+              y1="80"
+              x2="480"
+              y2="160"
+              stroke="#CBD5E1"
+              stroke-width="2"
+          />
+
+          <path
+              d="M480 80 L515 91 L480 103 Z"
+              fill="#22D3EE"
+          />
+
+          <text
+              x="480"
+              y="176"
+              text-anchor="middle"
+              fill="#22D3EE"
+              font-family="monospace"
+              font-size="7"
+              font-weight="700"
+          >
+              BUILD
+          </text>
+          """
+
+
+          # HUD
+
+          tech_game_svg += f"""
+          <text
+              x="20"
+              y="20"
+              fill="#22D3EE"
+              font-family="monospace"
+              font-size="9"
+              font-weight="700"
+          >
+              TECH STACK ARCADE
+          </text>
+
+          <text
+              x="20"
+              y="32"
+              fill="#64748B"
+              font-family="monospace"
+              font-size="6"
+          >
+              COLLECT • LEARN • BUILD • LEVEL UP
+          </text>
+
+          <rect
+              x="398"
+              y="12"
+              width="108"
+              height="22"
+              rx="6"
+              fill="#071426"
+              stroke="#22D3EE"
+              stroke-width="1"
+          />
+
+          <text
+              x="452"
+              y="26"
+              text-anchor="middle"
+              fill="#22D3EE"
+              font-family="monospace"
+              font-size="8"
+              font-weight="700"
+          >
+              LEVEL ∞
+          </text>
+
+          <rect
+              x="365"
+              y="190"
+              width="142"
+              height="42"
+              rx="7"
+              fill="#06111F"
+              stroke="#22D3EE"
+              stroke-width="1"
+          />
+
+          <text
+              x="378"
+              y="207"
+              fill="#22D3EE"
+              font-family="monospace"
+              font-size="8"
+              font-weight="700"
+          >
+              STACKS UNLOCKED
+          </text>
+
+          <text
+              x="378"
+              y="222"
+              fill="#E2E8F0"
+              font-family="monospace"
+              font-size="8"
+          >
+              {len(top_languages)} / {len(top_languages)}
+          </text>
+          """
 
 
           # ============================================================
-          # CONTRIBUTION HEATMAP SVG
+          # CONTRIBUTION HEATMAP
           # ============================================================
 
           heatmap_svg = ""
 
-          # Position of the actual GitHub-style graph
           graph_x = 150
           graph_y = 465
 
@@ -361,27 +705,29 @@ jobs:
           gap = 4
           step = square + gap
 
-          # Month labels
           previous_month = None
+
 
           for week_index, week in enumerate(weeks):
 
-              days = week.get("contributionDays", [])
+              days = week.get(
+                  "contributionDays",
+                  []
+              )
 
               if not days:
                   continue
 
               first_day = days[0]
 
-              date_string = first_day["date"]
-
               try:
                   current_date = datetime.strptime(
-                      date_string,
+                      first_day["date"],
                       "%Y-%m-%d"
                   )
               except ValueError:
                   continue
+
 
               month_key = (
                   current_date.year,
@@ -390,8 +736,6 @@ jobs:
 
               if month_key != previous_month:
 
-                  month_name = current_date.strftime("%b")
-
                   heatmap_svg += f"""
                   <text
                       x="{graph_x + week_index * step}"
@@ -399,17 +743,18 @@ jobs:
                       class="muted"
                       font-size="11"
                   >
-                      {month_name}
+                      {current_date.strftime("%b")}
                   </text>
                   """
 
                   previous_month = month_key
 
 
-              # Contribution squares
               for day in days:
 
-                  weekday = int(day.get("weekday", 0))
+                  weekday = int(
+                      day.get("weekday", 0)
+                  )
 
                   x = (
                       graph_x
@@ -436,7 +781,6 @@ jobs:
                       ""
                   )
 
-                  # Real GitHub color + real contribution count
                   heatmap_svg += f"""
                   <rect
                       x="{x}"
@@ -445,23 +789,22 @@ jobs:
                       height="{square}"
                       rx="3"
                       fill="{escape(color)}"
-                      opacity="0.95"
                   >
                       <title>
-                          {escape(date_value)} — {count} contribution{"s" if count != 1 else ""}
+                          {escape(date_value)}
+                          — {count} contribution{"s" if count != 1 else ""}
                       </title>
                   </rect>
                   """
 
 
           # Day labels
-          day_labels = [
+
+          for label, weekday in [
               ("Mon", 1),
               ("Wed", 3),
               ("Fri", 5)
-          ]
-
-          for label, weekday in day_labels:
+          ]:
 
               y = (
                   graph_y
@@ -481,9 +824,7 @@ jobs:
               """
 
 
-          # Legend
-          legend_x = 850
-          legend_y = 580
+          # Contribution legend
 
           legend_colors = [
               "#161B22",
@@ -493,10 +834,10 @@ jobs:
               "#39D353"
           ]
 
-          heatmap_svg += f"""
+          heatmap_svg += """
           <text
               x="150"
-              y="{legend_y}"
+              y="580"
               class="muted"
               font-size="11"
           >
@@ -504,12 +845,12 @@ jobs:
           </text>
           """
 
-          for index, color in enumerate(legend_colors):
+          for i, color in enumerate(legend_colors):
 
               heatmap_svg += f"""
               <rect
-                  x="{190 + index * 20}"
-                  y="{legend_y - 10}"
+                  x="{190 + i * 20}"
+                  y="570"
                   width="12"
                   height="12"
                   rx="3"
@@ -517,10 +858,10 @@ jobs:
               />
               """
 
-          heatmap_svg += f"""
+          heatmap_svg += """
           <text
               x="300"
-              y="{legend_y}"
+              y="580"
               class="muted"
               font-size="11"
           >
@@ -562,32 +903,20 @@ jobs:
                 gradientUnits="userSpaceOnUse"
             >
               <stop stop-color="#050816"/>
-              <stop
-                  offset="0.5"
-                  stop-color="#0B1120"
-              />
-              <stop
-                  offset="1"
-                  stop-color="#111827"
-              />
+              <stop offset="0.5" stop-color="#0B1120"/>
+              <stop offset="1" stop-color="#111827"/>
             </linearGradient>
 
             <linearGradient
-                id="cyanLine"
+                id="border"
                 x1="0"
                 y1="0"
                 x2="1200"
                 y2="0"
             >
               <stop stop-color="#22D3EE"/>
-              <stop
-                  offset="0.5"
-                  stop-color="#6366F1"
-              />
-              <stop
-                  offset="1"
-                  stop-color="#22D3EE"
-              />
+              <stop offset="0.5" stop-color="#6366F1"/>
+              <stop offset="1" stop-color="#22D3EE"/>
             </linearGradient>
 
             <pattern
@@ -597,7 +926,7 @@ jobs:
                 patternUnits="userSpaceOnUse"
             >
               <path
-                  d="M 32 0 L 0 0 0 32"
+                  d="M32 0 L0 0 0 32"
                   fill="none"
                   stroke="#1E293B"
                   stroke-width="1"
@@ -605,31 +934,17 @@ jobs:
               />
             </pattern>
 
-            <filter
-                id="glow"
-                x="-50%"
-                y="-50%"
-                width="200%"
-                height="200%"
-            >
-              <feGaussianBlur
-                  stdDeviation="4"
-                  result="blur"
-              />
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-
             <style>
+
               .mono {{
                 font-family:
                   "SFMono-Regular",
                   Consolas,
                   "Liberation Mono",
                   monospace;
+
                 fill: #E2E8F0;
+
                 letter-spacing: 0.5px;
               }}
 
@@ -639,7 +954,9 @@ jobs:
                   Consolas,
                   "Liberation Mono",
                   monospace;
+
                 fill: #64748B;
+
                 letter-spacing: 0.4px;
               }}
 
@@ -652,12 +969,15 @@ jobs:
                 stroke: #1E293B;
                 stroke-width: 1;
               }}
+
             </style>
 
           </defs>
 
 
-          <!-- BACKGROUND -->
+          <!-- ======================================================
+               BACKGROUND
+          ======================================================= -->
 
           <rect
               width="1200"
@@ -679,13 +999,14 @@ jobs:
               width="1198"
               height="648"
               rx="23"
-              stroke="url(#cyanLine)"
+              stroke="url(#border)"
               stroke-width="2"
-              opacity="0.75"
           />
 
 
-          <!-- HEADER -->
+          <!-- ======================================================
+               HEADER
+          ======================================================= -->
 
           <text
               x="52"
@@ -706,15 +1027,11 @@ jobs:
               {USERNAME} • AUTO-UPDATED FROM GITHUB API
           </text>
 
-
-          <!-- LIVE INDICATOR -->
-
           <circle
               cx="1085"
               cy="54"
               r="6"
               fill="#22D3EE"
-              filter="url(#glow)"
           />
 
           <text
@@ -728,7 +1045,9 @@ jobs:
           </text>
 
 
-          <!-- PROFILE CORE -->
+          <!-- ======================================================
+               PROFILE CORE
+          ======================================================= -->
 
           <rect
               x="52"
@@ -810,7 +1129,9 @@ jobs:
           </text>
 
 
-          <!-- LANGUAGE MATRIX -->
+          <!-- ======================================================
+               TECH STACK ARCADE
+          ======================================================= -->
 
           <rect
               x="620"
@@ -821,20 +1142,14 @@ jobs:
               class="panel"
           />
 
-          <text
-              x="645"
-              y="143"
-              class="cyan mono"
-              font-size="11"
-              font-weight="700"
-          >
-              LANGUAGE MATRIX
-          </text>
-
-          {language_svg}
+          <g transform="translate(620 115)">
+              {tech_game_svg}
+          </g>
 
 
-          <!-- PROFILE FOCUS -->
+          <!-- ======================================================
+               PROFILE FOCUS
+          ======================================================= -->
 
           <rect
               x="52"
@@ -875,7 +1190,9 @@ jobs:
           </text>
 
 
-          <!-- CONTRIBUTION ACTIVITY -->
+          <!-- ======================================================
+               CONTRIBUTIONS
+          ======================================================= -->
 
           <rect
               x="52"
@@ -909,7 +1226,9 @@ jobs:
           {heatmap_svg}
 
 
-          <!-- FOOTER -->
+          <!-- ======================================================
+               FOOTER
+          ======================================================= -->
 
           <line
               x1="52"
@@ -943,39 +1262,39 @@ jobs:
 
 
           # ============================================================
-          # WRITE FILE
+          # WRITE
           # ============================================================
 
-          os.makedirs("assets", exist_ok=True)
+          os.makedirs(
+              "assets",
+              exist_ok=True
+          )
 
           with open(
               "assets/github.svg",
               "w",
               encoding="utf-8"
           ) as file:
+
               file.write(svg)
 
-          print(
-              "Dashboard generated successfully."
-          )
-
-          print(
-              f"Repositories: {public_repos}"
-          )
-
-          print(
-              f"Stars: {total_stars}"
-          )
-
-          print(
-              f"Forks: {total_forks}"
-          )
-
-          print(
-              f"Contributions: {total_contributions}"
-          )
+          print("================================")
+          print("LIVE TELEMETRY GENERATED")
+          print("================================")
+          print(f"Repositories: {public_repos}")
+          print(f"Stars: {total_stars}")
+          print(f"Forks: {total_forks}")
+          print(f"Contributions: {total_contributions}")
+          print(f"Stack: {', '.join(top_languages)}")
+          print("================================")
 
           PY
+
+
+      # ============================================================
+      # COMMIT
+      # ============================================================
+
       - name: Commit dashboard
         run: |
           git config user.name "github-actions[bot]"
@@ -994,5 +1313,3 @@ jobs:
           git rebase origin/main
 
           git push origin HEAD:main
-
-     
