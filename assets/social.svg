@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-label="Connect social section">
+  <defs>
+    <linearGradient id="sg_bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#030712"/>
+      <stop offset="0.55" stop-color="#0a1224"/>
+      <stop offset="1" stop-color="#1f1239"/>
+    </linearGradient>
+    <linearGradient id="sg_stroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="sg_sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#93c5fd" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="sg_glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="sg_grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#38bdf8" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="360" rx="24" fill="url(#sg_bg)"/>
+  <rect width="1200" height="360" rx="24" fill="url(#sg_grid)" opacity="0.4"/>
+  <rect x="1" y="1" width="1198" height="358" rx="23" fill="none" stroke="url(#sg_stroke)" stroke-opacity="0.35"/>
+
+  <text x="58" y="66" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="1.5">CONNECT</text>
+  <text x="58" y="94" fill="#93c5fd" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="1.2">LET&apos;S BUILD SOMETHING.</text>
+
+  <g transform="translate(56 130)">
+    <rect width="340" height="184" rx="20" fill="#0a1428" fill-opacity="0.86" stroke="url(#sg_stroke)" stroke-opacity="0.7"/>
+    <rect x="0" y="0" width="340" height="184" rx="20" fill="url(#sg_sweep)" opacity="0.2" transform="translate(-360 0) skewX(-20)">
+      <animate attributeName="x" values="-360;560" dur="7.8s" repeatCount="indefinite"/>
+    </rect>
+    <circle cx="48" cy="52" r="26" fill="#0b1220" stroke="#38bdf8"/>
+    <circle cx="48" cy="52" r="30" fill="#22d3ee" opacity="0.13" filter="url(#sg_glow)"><animate attributeName="opacity" values="0.08;0.24;0.08" dur="3.2s" repeatCount="indefinite"/></circle>
+    <path d="M42 63h-8V43h8v20zm-4-23.5a4.7 4.7 0 1 1 0-9.4 4.7 4.7 0 0 1 0 9.4zM66 63h-8v-10.3c0-2.4-.9-4.1-3.2-4.1-1.8 0-2.8 1.2-3.3 2.3-.2.4-.2 1-.2 1.6V63h-8s.1-16.8 0-18.5h8v2.6c1.1-1.7 3-4.1 7.2-4.1 5.3 0 9.3 3.4 9.3 10.9V63z" fill="#dbeafe"/>
+    <text x="90" y="48" fill="#e2f4ff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">LINKEDIN</text>
+    <text x="90" y="72" fill="#93c5fd" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="1">PRO NETWORK • ACTIVE</text>
+    <circle cx="308" cy="28" r="5" fill="#22c55e"><animate attributeName="opacity" values="0.35;1;0.35" dur="2.4s" repeatCount="indefinite"/></circle>
+    <rect x="24" y="96" width="292" height="70" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-opacity="0.3"/>
+    <text x="40" y="122" fill="#bfdbfe" font-family="JetBrains Mono, monospace" font-size="12">Open to collaboration, product builds,</text>
+    <text x="40" y="140" fill="#c4b5fd" font-family="JetBrains Mono, monospace" font-size="12">and engineering opportunities.</text>
+    <animateTransform attributeName="transform" type="translate" values="56 130;56 124;56 130" dur="7s" repeatCount="indefinite"/>
+  </g>
+
+  <g transform="translate(430 130)">
+    <rect width="340" height="184" rx="20" fill="#0a1428" fill-opacity="0.86" stroke="url(#sg_stroke)" stroke-opacity="0.7"/>
+    <rect x="0" y="0" width="340" height="184" rx="20" fill="url(#sg_sweep)" opacity="0.2" transform="translate(-360 0) skewX(-20)">
+      <animate attributeName="x" values="-360;560" dur="8.4s" repeatCount="indefinite"/>
+    </rect>
+    <circle cx="48" cy="52" r="26" fill="#0b1220" stroke="#f472b6"/>
+    <circle cx="48" cy="52" r="30" fill="#d946ef" opacity="0.13" filter="url(#sg_glow)"><animate attributeName="opacity" values="0.08;0.26;0.08" dur="2.9s" repeatCount="indefinite"/></circle>
+    <rect x="32" y="36" width="32" height="32" rx="10" fill="none" stroke="#f8fafc" stroke-width="2.4"/>
+    <circle cx="48" cy="52" r="7" fill="none" stroke="#f8fafc" stroke-width="2.4"/>
+    <circle cx="58" cy="42" r="2.1" fill="#f8fafc"/>
+    <text x="90" y="48" fill="#e2f4ff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">INSTAGRAM</text>
+    <text x="90" y="72" fill="#f5d0fe" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="1">VISUAL UPDATES • ACTIVE</text>
+    <circle cx="308" cy="28" r="5" fill="#22c55e"><animate attributeName="opacity" values="0.35;1;0.35" dur="2.2s" repeatCount="indefinite"/></circle>
+    <rect x="24" y="96" width="292" height="70" rx="12" fill="#0f172a" stroke="#c084fc" stroke-opacity="0.3"/>
+    <text x="40" y="122" fill="#e9d5ff" font-family="JetBrains Mono, monospace" font-size="12">Behind-the-scenes visuals, snapshots,</text>
+    <text x="40" y="140" fill="#c4b5fd" font-family="JetBrains Mono, monospace" font-size="12">and creative workflow moments.</text>
+    <animateTransform attributeName="transform" type="translate" values="430 130;430 136;430 130" dur="7.4s" repeatCount="indefinite"/>
+  </g>
+
+  <g transform="translate(804 130)">
+    <rect width="340" height="184" rx="20" fill="#0a1428" fill-opacity="0.86" stroke="url(#sg_stroke)" stroke-opacity="0.7"/>
+    <rect x="0" y="0" width="340" height="184" rx="20" fill="url(#sg_sweep)" opacity="0.2" transform="translate(-360 0) skewX(-20)">
+      <animate attributeName="x" values="-360;560" dur="8.1s" repeatCount="indefinite"/>
+    </rect>
+    <circle cx="48" cy="52" r="26" fill="#0b1220" stroke="#22d3ee"/>
+    <circle cx="48" cy="52" r="30" fill="#22d3ee" opacity="0.13" filter="url(#sg_glow)"><animate attributeName="opacity" values="0.08;0.24;0.08" dur="3s" repeatCount="indefinite"/></circle>
+    <path d="M34 38h8.2l5.8 8.3 6.5-8.3h7.6l-10.3 13.2L63 66h-8.3l-6.4-9-7 9h-7.8l11.2-14.2L34 38z" fill="#f8fafc"/>
+    <text x="90" y="48" fill="#e2f4ff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">X</text>
+    <text x="90" y="72" fill="#93c5fd" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="1">LIVE SIGNALS • ACTIVE</text>
+    <circle cx="308" cy="28" r="5" fill="#22c55e"><animate attributeName="opacity" values="0.35;1;0.35" dur="2.6s" repeatCount="indefinite"/></circle>
+    <rect x="24" y="96" width="292" height="70" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-opacity="0.3"/>
+    <text x="40" y="122" fill="#bfdbfe" font-family="JetBrains Mono, monospace" font-size="12">Shipping notes, learning milestones,</text>
+    <text x="40" y="140" fill="#c4b5fd" font-family="JetBrains Mono, monospace" font-size="12">and project release signals.</text>
+    <animateTransform attributeName="transform" type="translate" values="804 130;804 124;804 130" dur="7.1s" repeatCount="indefinite"/>
+  </g>
+
+  <g fill="#93c5fd" opacity="0.5">
+    <circle cx="1160" cy="60" r="1.8"><animate attributeName="opacity" values="0.2;1;0.2" dur="3.1s" repeatCount="indefinite"/></circle>
+    <circle cx="1126" cy="88" r="1.3"><animate attributeName="cy" values="88;82;88" dur="4.4s" repeatCount="indefinite"/></circle>
+    <circle cx="156" cy="40" r="1.5"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="3.8s" repeatCount="indefinite"/></circle>
+  </g>
+</svg>
