@@ -804,7 +804,192 @@ jobs:
           print("Languages:", top_languages)
 
           PY
+      - name: Animate GitHub telemetry
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin python3-pil
 
+          rsvg-convert \
+            -w 1200 \
+            -h 680 \
+            assets/github.svg \
+            -o assets/github-base.png
+
+          python <<'PY'
+          from PIL import Image, ImageDraw, ImageFilter
+          import math
+          import os
+
+          INPUT = "assets/github-base.png"
+          OUTPUT = "assets/github.gif"
+
+          base = Image.open(INPUT).convert("RGBA")
+
+          WIDTH, HEIGHT = base.size
+
+          frames = []
+
+          FRAME_COUNT = 24
+          DURATION = 90
+
+          for frame_number in range(FRAME_COUNT):
+
+              frame = base.copy()
+
+              # -------------------------------------------------
+              # ANIMATION PROGRESS
+              # -------------------------------------------------
+
+              t = frame_number / FRAME_COUNT
+
+              # Smooth pulse
+              pulse = (math.sin(t * math.pi * 2) + 1) / 2
+
+              # Moving scanline
+              scan_y = int(125 + ((HEIGHT - 160) * t))
+
+              # -------------------------------------------------
+              # GLOW LAYER
+              # -------------------------------------------------
+
+              glow = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+              glow_draw = ImageDraw.Draw(glow)
+
+              # Cyan scanning line
+              glow_draw.line(
+                  [(40, scan_y), (WIDTH - 40, scan_y)],
+                  fill=(34, 211, 238, 110),
+                  width=2
+              )
+
+              # Soft scanning glow
+              glow_blur = glow.filter(
+                  ImageFilter.GaussianBlur(8)
+              )
+
+              frame = Image.alpha_composite(frame, glow_blur)
+              frame = Image.alpha_composite(frame, glow)
+
+              # -------------------------------------------------
+              # LIVE INDICATOR PULSE
+              # -------------------------------------------------
+
+              live_layer = Image.new(
+                  "RGBA",
+                  (WIDTH, HEIGHT),
+                  (0, 0, 0, 0)
+              )
+
+              live_draw = ImageDraw.Draw(live_layer)
+
+              cx = 1090
+              cy = 66
+
+              radius = int(5 + pulse * 4)
+
+              # Outer glow
+              live_draw.ellipse(
+                  (
+                      cx - radius - 5,
+                      cy - radius - 5,
+                      cx + radius + 5,
+                      cy + radius + 5
+                  ),
+                  fill=(34, 211, 238, 35)
+              )
+
+              live_layer = live_layer.filter(
+                  ImageFilter.GaussianBlur(5)
+              )
+
+              frame = Image.alpha_composite(
+                  frame,
+                  live_layer
+              )
+
+              # Sharp indicator
+              indicator = Image.new(
+                  "RGBA",
+                  (WIDTH, HEIGHT),
+                  (0, 0, 0, 0)
+              )
+
+              indicator_draw = ImageDraw.Draw(indicator)
+
+              indicator_draw.ellipse(
+                  (
+                      cx - radius,
+                      cy - radius,
+                      cx + radius,
+                      cy + radius
+                  ),
+                  fill=(34, 211, 238, 255)
+              )
+
+              frame = Image.alpha_composite(
+                  frame,
+                  indicator
+              )
+
+              # -------------------------------------------------
+              # BORDER PULSE
+              # -------------------------------------------------
+
+              border = Image.new(
+                  "RGBA",
+                  (WIDTH, HEIGHT),
+                  (0, 0, 0, 0)
+              )
+
+              border_draw = ImageDraw.Draw(border)
+
+              alpha = int(80 + pulse * 100)
+
+              border_draw.rounded_rectangle(
+                  (
+                      16,
+                      16,
+                      WIDTH - 16,
+                      HEIGHT - 16
+                  ),
+                  radius=28,
+                  outline=(34, 211, 238, alpha),
+                  width=2
+              )
+
+              frame = Image.alpha_composite(
+                  frame,
+                  border
+              )
+
+              # -------------------------------------------------
+              # CONVERT FOR GIF
+              # -------------------------------------------------
+
+              frame = frame.convert("RGB")
+
+              frames.append(frame)
+
+          # -----------------------------------------------------
+          # SAVE ANIMATED GIF
+          # -----------------------------------------------------
+
+          frames[0].save(
+              OUTPUT,
+              save_all=True,
+              append_images=frames[1:],
+              duration=DURATION,
+              loop=0,
+              optimize=True
+          )
+
+          print("Animated GitHub telemetry generated.")
+          print(f"Frames: {len(frames)}")
+          print(f"Output: {OUTPUT}")
+
+          PY
+
+          rm -f assets/github-base.png
       - name: Commit dashboard
         run: |
           git config user.name "github-actions[bot]"
